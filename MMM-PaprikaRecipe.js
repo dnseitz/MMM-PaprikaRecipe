@@ -50,14 +50,16 @@ Module.register("MMM-PaprikaRecipe", {
 
     socketNotificationReceived: function(notification, payload) {
       if (notification == "PAPRIKA_RECIPE_DATA" && payload.instance_id == this.identifier) {
-        Log.info(this.name + ": Recieved Recipe Data: " + payload.recipe);
+        Log.info(this.name + ": Recieved Recipe Data:");
+        Log.info(payload.recipe);
         this.recipe = {
           name: payload.recipe.name,
+          photo_url: payload.recipe.photo_url,
           ingredient_list: payload.recipe.ingredients.split("\n"),
           directions: payload.recipe.directions.split("\n").filter((str) => /\S/.test(str))
         };
 
-        //this.recipe = recipe;
+        Log.info(this.name + ": Photo URL: " + payload.recipe.photo_url);
 
         MM.getModules().exceptModule(this).enumerate(function(module) {
           module.hide(100);

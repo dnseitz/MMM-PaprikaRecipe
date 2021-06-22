@@ -5,21 +5,27 @@
 {% else %}
 
   <div class="container">
-    <div>{{ recipe.name }}</div>
+    <div class="title large">
+      {% if recipe.photo_url %}
+        <img class="img-cell" src="{{ recipe.photo_url }}"/>
+      {% endif %}
+      {{recipe.name }}
+    </div>
     <div class="row">
       <div class="column ingredients">
         <ul>
         <lh>Ingredients</lh>
         {% for ingredient in recipe.ingredient_list %}
-          <li class="medium">{{ ingredient }}</td>
+          <li class="small">{{ ingredient }}</td>
         {% endfor %}
         </ul>
       </div>
+      <div class="column vertical-line"></div>
       <div class="column directions">
         <ol>
         <lh>Directions</lh>
         {% for step in recipe.directions %}
-          <li class="medium">{{ step }}</td>
+          <li class="small">{{ step }}</td>
         {% endfor %}
         </ol>
       </div>
