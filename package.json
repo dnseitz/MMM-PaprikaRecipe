@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/dnseitz/MMM-PaprikaRecipe/issues"
   },
-  "homepage": "https://github.com/dnseitz/MMM-PaprikaRecipe#readme"
+  "homepage": "https://github.com/dnseitz/MMM-PaprikaRecipe#readme",
+  "dependencies": {
+    "paprika-api": "^1.0.3"
+  }
 }
