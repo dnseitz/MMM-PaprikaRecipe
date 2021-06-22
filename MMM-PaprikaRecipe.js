@@ -43,8 +43,40 @@ Module.register("MMM-PaprikaRecipe", {
     },
 
     notificationReceived: function(notification, payload, sender) {
+      Log.info(this.name + ": Recieved Notification: " + notification);
+      var self = this;
       if (notification === "DOM_OBJECTS_CREATED") {
-        this.getData("FE7402FD-5666-4796-B18C-B5BACD625EA6");
+        Log.info(this.name + ": Hiding on startup");
+        this.hide();
+
+        //this.sendNotification("PAPRIKA_SHOW_RECIPE_DETAILS", { recipe_uid: "FE7402FD-5666-4796-B18C-B5BACD625EA6" });
+        //this.notificationReceived("PAPRIKA_SHOW_RECIPE_DETAILS", { recipe_uid: "FE7402FD-5666-4796-B18C-B5BACD625EA6" }, this);
+      } else if (notification === "PAPRIKA_SHOW_RECIPE_DETAILS") {
+        if (payload.recipe_uid == null || payload.recipe_uid == "") {
+          Log.error(this.name + ": PAPRIKA_SHOW_RECIPE_DETAILS - No recipe UID provided");
+          return;
+        }
+
+        if (this.hidden == true) {
+          MM.getModules().exceptModule(this).enumerate(function(module) {
+            module.hide(500);
+          });
+          this.show(500);
+        }
+
+        this.getData(payload.recipe_uid);
+      } else if (notification === "PAPRIKA_DISMISS_RECIPE_DETAILS") {
+        if (this.hidden == true) {
+          Log.warn(this.name + ": PAPRIKA_DISMISS_RECIPE_DETAILS - Recipe is already dismissed");
+          return;
+        } else {
+          this.hide(500, function() {
+            self.recipe = null;
+          });
+          MM.getModules().exceptModule(this).enumerate(function(module) {
+            module.show(500);
+          });
+        }
       }
     },
 
@@ -61,10 +93,7 @@ Module.register("MMM-PaprikaRecipe", {
 
         Log.info(this.name + ": Photo URL: " + payload.recipe.photo_url);
 
-        MM.getModules().exceptModule(this).enumerate(function(module) {
-          module.hide(100);
-        });
-        this.updateDom();
+        this.updateDom(500);
       }
     }
 })
