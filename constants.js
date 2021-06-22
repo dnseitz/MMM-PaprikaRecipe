@@ -1,0 +1,3 @@
+module.exports = {
+  OPEN_RECIPE_NOTIFICATION: "OPEN_RECIPE_NOTIFICATION"
+};

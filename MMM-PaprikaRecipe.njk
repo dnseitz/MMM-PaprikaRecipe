@@ -1,0 +1,29 @@
+{% if loading %}
+
+  <div class="dimmed light small">"Loading..."</div>
+
+{% else %}
+
+  <div class="container">
+    <div>{{ recipe.name }}</div>
+    <div class="row">
+      <div class="column ingredients">
+        <ul>
+        <lh>Ingredients</lh>
+        {% for ingredient in recipe.ingredient_list %}
+          <li class="medium">{{ ingredient }}</td>
+        {% endfor %}
+        </ul>
+      </div>
+      <div class="column directions">
+        <ol>
+        <lh>Directions</lh>
+        {% for step in recipe.directions %}
+          <li class="medium">{{ step }}</td>
+        {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+
+{% endif %}
