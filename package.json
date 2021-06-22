@@ -1,0 +1,22 @@
+{
+  "name": "mmm-paprikarecipe",
+  "version": "1.0.0",
+  "description": "A MagicMirror module that displays a Paprika recipe.",
+  "main": "MMM-PaprikaRecipe.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dnseitz/MMM-PaprikaRecipe.git"
+  },
+  "keywords": [
+    "MagicMirror"
+  ],
+  "author": "dnseitz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dnseitz/MMM-PaprikaRecipe/issues"
+  },
+  "homepage": "https://github.com/dnseitz/MMM-PaprikaRecipe#readme"
+}
