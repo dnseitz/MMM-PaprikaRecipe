@@ -50,6 +50,12 @@ Module.register("MMM-PaprikaRecipe", {
         this.hide();
 
         //this.sendNotification("PAPRIKA_SHOW_RECIPE_DETAILS", { recipe_uid: "FE7402FD-5666-4796-B18C-B5BACD625EA6" });
+        setTimeout(function() {
+          self.notificationReceived("PAPRIKA_SHOW_RECIPE_DETAILS", { recipe_uid: "FE7402FD-5666-4796-B18C-B5BACD625EA6" }, this);
+          setTimeout(function() {
+            self.notificationReceived("PAPRIKA_DISMISS_RECIPE_DETAILS", {}, this);
+          }, 10000);
+        }, 10000);
         //this.notificationReceived("PAPRIKA_SHOW_RECIPE_DETAILS", { recipe_uid: "FE7402FD-5666-4796-B18C-B5BACD625EA6" }, this);
       } else if (notification === "PAPRIKA_SHOW_RECIPE_DETAILS") {
         if (payload.recipe_uid == null || payload.recipe_uid == "") {
