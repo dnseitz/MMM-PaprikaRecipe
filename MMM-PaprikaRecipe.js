@@ -31,9 +31,11 @@ Module.register("MMM-PaprikaRecipe", {
       Log.info("Starting module: " + this.name);
 
       this.recipe = null;
+      this.recipeUIDToDisplay = null;
     },
 
     getData: function(recipeUID) {
+      Log.info("Fetching Recipe for UID: " + recipeUID);
       this.sendSocketNotification("GET_PAPRIKA_RECIPE", {
         instance_id: this.identifier,
         email: this.config.email,
@@ -43,7 +45,6 @@ Module.register("MMM-PaprikaRecipe", {
     },
 
     notificationReceived: function(notification, payload, sender) {
-      Log.info(this.name + ": Recieved Notification: " + notification);
       var self = this;
       if (notification === "DOM_OBJECTS_CREATED") {
         Log.info(this.name + ": Hiding on startup");
@@ -64,6 +65,7 @@ Module.register("MMM-PaprikaRecipe", {
           this.show(500);
         }
 
+        this.recipeUIDToDisplay = payload.recipe_uid;
         this.getData(payload.recipe_uid);
       } else if (notification === "PAPRIKA_DISMISS_RECIPE_DETAILS") {
         if (this.hidden == true) {
@@ -72,6 +74,7 @@ Module.register("MMM-PaprikaRecipe", {
         } else {
           this.hide(500, function() {
             self.recipe = null;
+            self.recipeUIDToDisplay = null;
             self.updateDom();
           });
           MM.getModules().exceptModule(this).enumerate(function(module) {
@@ -83,6 +86,9 @@ Module.register("MMM-PaprikaRecipe", {
 
     socketNotificationReceived: function(notification, payload) {
       if (notification == "PAPRIKA_RECIPE_DATA" && payload.instance_id == this.identifier) {
+        if (this.recipeUIDToDisplay != payload.recipe.uid) {
+          return;
+        }
         Log.info(this.name + ": Recieved Recipe Data:");
         Log.info(payload.recipe);
         this.recipe = {
@@ -91,8 +97,6 @@ Module.register("MMM-PaprikaRecipe", {
           ingredient_list: payload.recipe.ingredients.split("\n"),
           directions: payload.recipe.directions.split("\n").filter((str) => /\S/.test(str))
         };
-
-        Log.info(this.name + ": Photo URL: " + payload.recipe.photo_url);
 
         this.updateDom(500);
       }

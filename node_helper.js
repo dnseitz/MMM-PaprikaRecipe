@@ -9,8 +9,6 @@ module.exports = NodeHelper.create({
   },
   /// "GET_PAPRIKA_RECIPE" - Payload: { email: string, password: string, recipe_uid: string }
   socketNotificationReceived: function(notification, payload) {
-    console.log(this.name + " received a socket notification: " + notification + " - Payload: " + payload);
-
     if (notification === "GET_PAPRIKA_RECIPE") {
       if (payload.email == null || payload.email == "") {
         console.log(this.name + " *** ERROR *** No email set for PaprikaRecipe.");
@@ -23,6 +21,10 @@ module.exports = NodeHelper.create({
           this.paprikaAPI = new PaprikaAPI.PaprikaApi(payload.email, payload.password);
         }
 
+        if (this.outstandingRequest == true) {
+          return;
+        }
+
         console.log(this.name + ": Fetching recipe with UID - " + payload.recipe_uid);
         
         var self = this;
@@ -33,11 +35,14 @@ module.exports = NodeHelper.create({
               instance_id: payload.instance_id,
               recipe: recipe
             };
-            console.log(self.name + ": Recieved Recipe Data");
-            console.log(self.name + ": Recipe Name: " + recipe.name);
-            console.log(self.name + ": Recipe Ingredients: " + recipe.ingredients);
-            console.log(self.name + ": Recipe Directions: " + recipe.directions);
             self.sendSocketNotification("PAPRIKA_RECIPE_DATA", resp);
+          })
+          .catch((error) => {
+            console.log(self.name + ": Caught an exception during recipe fetch");
+            console.log(error);
+          })
+          .then(() => {
+            self.outstandingRequest = false;
           });
       }
     }
